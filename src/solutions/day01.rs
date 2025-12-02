@@ -1,6 +1,5 @@
 use crate::Solve;
 
-
 pub struct Problem {
     direction: Vec<char>,
     number: Vec<i16>,
@@ -20,7 +19,8 @@ impl Solve for Problem {
             }
 
             // Remove overflows using modulo
-            dial = ((dial % 100) + 100) % 100;
+            // Fancy function to get the positive remainder, equiv to ((dial % 100) + 100) % 100;
+            dial = dial.rem_euclid(100);
 
             // Count if at zero
             if dial == 0 {
@@ -52,18 +52,19 @@ impl Solve for Problem {
                 'R' => dial += number,
                 _ => panic!("Invalid direction"),
             }
-            
+
             // Handle overflows in chunks of 100
             if dial > 99 {
-                zeros += (dial / 100) as i64;
-                dial = dial % 100;
+                zeros += i64::from(dial / 100);
+                dial %= 100;
                 last_direction = Direction::Up;
             } else if dial < 0 {
-                zeros += ((-dial - 1) / 100 + 1) as i64;
-                dial = ((dial % 100) + 100) % 100;
+                zeros += i64::from((-dial - 1) / 100 + 1);
+                // Fancy function to get the positive remainder, equiv to ((dial % 100) + 100) % 100;
+                dial = dial.rem_euclid(100);
                 last_direction = Direction::Down;
             }
-            
+
             // Edge case: 0 - 5 is counted above and needs to be rolled back
             if last_direction == Direction::Down && was_zero {
                 zeros -= 1;
@@ -74,7 +75,7 @@ impl Solve for Problem {
 
                 // If up, already counted.  e.g. 50+150 already has 2 counted (200 - 100 - 100)
                 match last_direction {
-                    Direction::Up => {},
+                    Direction::Up => {}
                     Direction::Down | Direction::None => zeros += 1,
                 }
             } else {
@@ -90,7 +91,7 @@ impl Problem {
     pub fn new(data: &[String]) -> Self {
         let mut direction = Vec::with_capacity(data.len());
         let mut number = Vec::with_capacity(data.len());
-        
+
         for line in data {
             direction.push(line.chars().next().unwrap());
             number.push(line[1..].parse().unwrap());
@@ -100,7 +101,6 @@ impl Problem {
     }
 }
 
-
 #[cfg(test)]
 mod test {
     use super::*;
@@ -109,15 +109,21 @@ mod test {
 
     #[test]
     fn p1() {
-        assert_eq!(Problem::new(&load_file("input/01_test.txt")).p1(), ANSWERS[0]);
+        assert_eq!(
+            Problem::new(&load_file("input/01_test.txt")).p1(),
+            ANSWERS[0]
+        );
     }
 
     #[test]
     fn p2() {
-        assert_eq!(Problem::new(&load_file("input/01_test.txt")).p2(), ANSWERS[1]);
+        assert_eq!(
+            Problem::new(&load_file("input/01_test.txt")).p2(),
+            ANSWERS[1]
+        );
     }
 
-        #[test]
+    #[test]
     fn f1() {
         assert_eq!(Problem::new(&load_file("input/01.txt")).p1(), ANSWERS[2]);
     }
@@ -126,5 +132,4 @@ mod test {
     fn f2() {
         assert_eq!(Problem::new(&load_file("input/01.txt")).p2(), ANSWERS[3]);
     }
-
 }

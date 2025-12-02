@@ -1,13 +1,13 @@
 
 running 8 tests
-test solutions::day01::test::p1 ... ok
 test solutions::day01::test::p2 ... ok
-test solutions::day01::test::f1 ... ok
+test solutions::day01::test::p1 ... ok
 test solutions::day02::test::p1 ... ok
 test solutions::day02::test::p2 ... ok
+test solutions::day01::test::f1 ... ok
 test solutions::day01::test::f2 ... ok
-test solutions::day02::test::f1 ... ok
 test solutions::day02::test::f2 ... ok
+test solutions::day02::test::f1 ... ok
 
-test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.15s
 
