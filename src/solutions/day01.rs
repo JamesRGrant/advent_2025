@@ -1,69 +1,130 @@
 use crate::Solve;
-use std::collections::HashMap;
+
 
 pub struct Problem {
-    left: Vec<i64>,
-    right: Vec<i64>,
+    direction: Vec<char>,
+    number: Vec<i16>,
 }
 impl Solve for Problem {
-    /// sum of differences
+    /// Safe combo: how many times it rests at zero
     fn p1(&mut self) -> i64 {
-        self.left.sort_unstable();
-        self.right.sort_unstable();
-        let mut sum = 0;
+        let mut dial: i16 = 50;
+        let mut zeros: i64 = 0;
 
-        for i in 0..self.left.len() {
-            sum += (self.left[i] - self.right[i]).abs();
+        // loop through direction and number
+        for i in 0..self.direction.len() {
+            match self.direction[i] {
+                'L' => dial -= self.number[i],
+                'R' => dial += self.number[i],
+                _ => panic!("Invalid direction"),
+            }
+
+            // Remove overflows using modulo
+            dial = ((dial % 100) + 100) % 100;
+
+            // Count if at zero
+            if dial == 0 {
+                zeros += 1;
+            }
         }
-        sum
+
+        zeros
     }
 
-    /// For each left, sum of instances in right * left value
+    /// Safe combo: how many times it passes or rests at zero
     fn p2(&mut self) -> i64 {
-        let mut sum = 0;
-        let mut counts = HashMap::new();
+        #[derive(PartialEq)]
+        enum Direction {
+            Up,
+            Down,
+            None,
+        }
+        let mut dial: i16 = 50;
+        let mut zeros: i64 = 0;
+        let mut last_direction;
+        let mut was_zero = false;
 
-        // Count the right side
-        for x in &self.right {
-            *counts.entry(x).or_insert(0) += 1;
+        // Use iterator instead of indexed access for better performance
+        for (&direction, &number) in self.direction.iter().zip(self.number.iter()) {
+            last_direction = Direction::None;
+            match direction {
+                'L' => dial -= number,
+                'R' => dial += number,
+                _ => panic!("Invalid direction"),
+            }
+            
+            // Handle overflows in chunks of 100
+            if dial > 99 {
+                zeros += (dial / 100) as i64;
+                dial = dial % 100;
+                last_direction = Direction::Up;
+            } else if dial < 0 {
+                zeros += ((-dial - 1) / 100 + 1) as i64;
+                dial = ((dial % 100) + 100) % 100;
+                last_direction = Direction::Down;
+            }
+            
+            // Edge case: 0 - 5 is counted above and needs to be rolled back
+            if last_direction == Direction::Down && was_zero {
+                zeros -= 1;
+            }
+
+            if dial == 0 {
+                was_zero = true;
+
+                // If up, already counted.  e.g. 50+150 already has 2 counted (200 - 100 - 100)
+                match last_direction {
+                    Direction::Up => {},
+                    Direction::Down | Direction::None => zeros += 1,
+                }
+            } else {
+                was_zero = false;
+            }
         }
 
-        for x in &self.left {
-            sum += x * counts.get(x).unwrap_or(&0);
-        }
-        sum
+        zeros
     }
 }
+
 impl Problem {
     pub fn new(data: &[String]) -> Self {
-        let mut left: Vec<i64> = Vec::new();
-        let mut right: Vec<i64> = Vec::new();
+        let mut direction = Vec::with_capacity(data.len());
+        let mut number = Vec::with_capacity(data.len());
+        
         for line in data {
-            let mut parts = line.split_whitespace();
-            left.push(parts.next().unwrap().parse().unwrap());
-            right.push(parts.next().unwrap().parse().unwrap());
+            direction.push(line.chars().next().unwrap());
+            number.push(line[1..].parse().unwrap());
         }
 
-        Problem { left, right }
+        Problem { direction, number }
     }
 }
+
 
 #[cfg(test)]
 mod test {
     use super::*;
     use crate::load_file;
+    const ANSWERS: [i64; 4] = [3, 6, 1177, 6768];
 
     #[test]
     fn p1() {
-        let start = std::time::Instant::now();
-        assert_eq!(Problem::new(&load_file("input/01_test.txt")).p1(), 11);
-        println!("P1 elapsed time:    {:>10?}", start.elapsed());
+        assert_eq!(Problem::new(&load_file("input/01_test.txt")).p1(), ANSWERS[0]);
     }
 
     #[test]
     fn p2() {
-        let start = std::time::Instant::now();
-        assert_eq!(Problem::new(&load_file("input/01_test.txt")).p2(), 31);
-        println!("P2 elapsed time:    {:>10?}", start.elapsed());
+        assert_eq!(Problem::new(&load_file("input/01_test.txt")).p2(), ANSWERS[1]);
     }
+
+        #[test]
+    fn f1() {
+        assert_eq!(Problem::new(&load_file("input/01.txt")).p1(), ANSWERS[2]);
+    }
+
+    #[test]
+    fn f2() {
+        assert_eq!(Problem::new(&load_file("input/01.txt")).p2(), ANSWERS[3]);
+    }
+
 }

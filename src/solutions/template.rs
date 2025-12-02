@@ -1,6 +1,4 @@
 use crate::Solve;
-#[allow(dead_code)]
-const ANSWERS: [i64; 4] = [0, 0, 0, 0];
 
 pub struct Problem {
     data: Vec<String>,
@@ -26,6 +24,7 @@ impl Problem {
 mod test {
     use super::*;
     use crate::load_file;
+    const ANSWERS: [i64; 4] = [0, 0, 0, 0];
 
     #[test]
     fn p1() {
