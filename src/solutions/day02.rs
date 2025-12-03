@@ -10,6 +10,17 @@ impl Solve for Problem {
         let mut sum: i64 = 0;
         let mut p2: i64 = 0;
 
+        // for (start, end) in &self.data {
+        //     let max_length = (end.to_string()).len() / 2;
+        //     let first_length = ((start.to_string()).len() as f64 / 2.0 + 0.5) as usize;
+        //     for i in 10i64.pow((max_length - 1) as u32)..10i64.pow(max_length as u32) {
+        //         let num = i + i * 10i64.pow(max_length as u32);
+        //         if num >= *start && num <= *end {
+        //             sum += num;
+        //         }
+        //     }
+        // }
+
         for (start, end) in &self.data {
             let mut walker = *start;
             while walker <= *end {
