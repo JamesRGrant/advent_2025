@@ -1,17 +1,12 @@
-
-running 12 tests
-test solutions::day01::test::p1 ... ok
-test solutions::day01::test::p2 ... ok
-test solutions::day02::test::p1 ... ok
-test solutions::day02::test::p2 ... ok
-test solutions::day03::test::p1 ... ok
-test solutions::day03::test::p2 ... ok
-test solutions::day03::test::f1 ... ok
-test solutions::day01::test::f1 ... ok
-test solutions::day01::test::f2 ... ok
-test solutions::day03::test::f2 ... ok
-test solutions::day02::test::f1 ... ok
-test solutions::day02::test::f2 ... ok
-
-test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.44s
-
+01: load/parse      in 670.289µs
+ 1:            1177 in  16.281µs
+ 2:            6768 in  26.826µs
+02: load/parse      in 227.792µs
+17077011375
+36118301269
+ 1:     17077011375 in  66.567ms
+ 2:     36037497037 in 151.000ns
+03: load/parse      in 539.867µs
+ 1:           17155 in  62.743µs
+ 2: 169685670469164 in   3.915ms
+Total elapsed time:     72.269ms

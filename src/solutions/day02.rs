@@ -1,4 +1,5 @@
 use crate::Solve;
+use std::collections::HashSet;
 
 pub struct Problem {
     data: Vec<(i64, i64)>,
@@ -10,59 +11,59 @@ impl Solve for Problem {
         let mut sum: i64 = 0;
         let mut p2: i64 = 0;
 
-        // for (start, end) in &self.data {
-        //     let max_length = (end.to_string()).len() / 2;
-        //     let first_length = ((start.to_string()).len() as f64 / 2.0 + 0.5) as usize;
-        //     for i in 10i64.pow((max_length - 1) as u32)..10i64.pow(max_length as u32) {
-        //         let num = i + i * 10i64.pow(max_length as u32);
-        //         if num >= *start && num <= *end {
-        //             sum += num;
-        //         }
-        //     }
-        // }
-
+        // Find the min/max digit lengths of all the ranges
+        let (mut min, mut max) = (usize::MAX, usize::MIN);
         for (start, end) in &self.data {
-            let mut walker = *start;
-            while walker <= *end {
-                let tmp = walker.to_string();
-                // Compare halves
-                if tmp[0..tmp.len() / 2] == tmp[tmp.len() / 2..] {
-                    sum += walker;
-                    p2 += walker;
-                } else {
-                    // Look for more options for part 2
-                    // Look for any size repeating multiple times, e.g. 121212
-                    // 222222 counts as one, not 3 (2, 22, 222)
-                    for size in 1..=(tmp.len() / 2) {
-                        // Only split if even segments
-                        if tmp.len() % size == 0 {
-                            let mut same = true;
-                            let mut i = size;
-                            let mut j = size * 2;
-
-                            // Check all the segments
-                            while j <= tmp.len() {
-                                if tmp[0..size] != tmp[i..j] {
-                                    same = false;
-                                    break;
-                                }
-                                i += size;
-                                j += size;
-                            }
-
-                            // Count only once per number
-                            if same {
-                                p2 += walker;
-                                break;
-                            }
-                        }
-                    }
-                }
-
-                walker += 1;
-            }
+            min = min.min(start.to_string().len());
+            max = max.max(end.to_string().len());
         }
 
+        // Pre-calculate powers for efficiency
+        let powers: Vec<i64> = (0..=max * 2)
+            .map(|i| 10_i64.pow(u32::try_from(i).unwrap()))
+            .collect();
+
+        // Use a set to avoid double counting 22 22 and 2 2 2 2
+        // Store sets by length
+        let mut splits: Vec<HashSet<i64>> = vec![HashSet::new(); max + 1];
+        let mut all: Vec<HashSet<i64>> = vec![HashSet::new(); max + 1];
+        for total_len in min..=max {
+            for seg_len in 1..=(total_len / 2) {
+                if total_len % seg_len == 0 {
+                    let segments = total_len / seg_len;
+
+                    // Generate all repeats of this size, e.g. seg_len =2 => 10..=99
+                    for seg in powers[seg_len - 1]..powers[seg_len] {
+                        let mut num = 0;
+                        let mut multiplier = 1;
+                        for _ in 0..segments {
+                            num += seg * multiplier;
+                            multiplier *= powers[seg_len];
+                        }
+                        if seg_len == total_len / 2 && total_len % 2 == 0 {
+                            // Half split for p1
+                            splits[total_len].insert(num);
+                        }
+                        // All repeats for p2
+                        all[total_len].insert(num);
+                    }
+                }
+            }
+        }
+        for (start, end) in &self.data {
+            for len in start.to_string().len()..=end.to_string().len() {
+                for &num in &splits[len] {
+                    if num >= *start && num <= *end {
+                        sum += num;
+                    }
+                }
+                for &num in &all[len] {
+                    if num >= *start && num <= *end {
+                        p2 += num;
+                    }
+                }
+            }
+        }
         self.p2 = p2;
         sum
     }

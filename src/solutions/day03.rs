@@ -4,7 +4,7 @@ pub struct Problem {
     data: Vec<String>,
 }
 impl Solve for Problem {
-    /// Short Description
+    /// Find the highest 2 digit number in each line and sum them
     fn p1(&mut self) -> i64 {
         let mut sum = 0;
         for line in &self.data {
@@ -33,7 +33,7 @@ impl Solve for Problem {
         sum
     }
 
-    /// Short Description
+    /// Find the highest 12 digit number in each line and sum them
     fn p2(&mut self) -> i64 {
         let mut sum = 0;
         for line in &self.data {
