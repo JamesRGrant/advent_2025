@@ -13,10 +13,7 @@ impl Solve for Problem {
             let mut j = 0;
 
             // Convert to numbers
-            let nums: Vec<i64> = line
-                .chars()
-                .map(|c| i64::from(c.to_digit(10).unwrap()))
-                .collect();
+            let nums: Vec<i64> = line.chars().map(|c| i64::from(c.to_digit(10).unwrap())).collect();
             for (i, x) in nums.iter().enumerate().take(nums.len() - 1) {
                 if *x > max {
                     max = *x;
@@ -63,9 +60,7 @@ impl Solve for Problem {
 }
 impl Problem {
     pub fn new(data: &[String]) -> Self {
-        Problem {
-            data: data.to_vec(),
-        }
+        Problem { data: data.to_vec() }
     }
 }
 

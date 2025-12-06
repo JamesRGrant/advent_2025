@@ -7,7 +7,7 @@ pub struct Problem {
 
 impl Solve for Problem {
     /// How many ingredients are fresh (in any range)
-     #[allow(clippy::cast_possible_wrap)]
+    #[allow(clippy::cast_possible_wrap)]
     fn p1(&mut self) -> i64 {
         let mut count = 0;
         for ingredient in &self.ingredients {
@@ -21,16 +21,16 @@ impl Solve for Problem {
         count
     }
 
-    /// Total list of ingredients that are fresh 
-     #[allow(clippy::cast_possible_wrap)]
+    /// Total list of ingredients that are fresh
+    #[allow(clippy::cast_possible_wrap)]
     fn p2(&mut self) -> i64 {
-        self.ranges.iter().map(|(s, e)| e - s + 1).sum::<i64>() 
+        self.ranges.iter().map(|(s, e)| e - s + 1).sum::<i64>()
     }
 }
 impl Problem {
     // Ranges of fresh ingredients, may overlap, e.g. 3-5
     // Blank line
-    // List of ingredients (1 per line)    
+    // List of ingredients (1 per line)
     // We are going to immediately merge the overlapping ranges
     pub fn new(data: &[String]) -> Self {
         let mut part1 = true;
@@ -49,12 +49,11 @@ impl Problem {
                 // Process part 2 lines
                 ingredients.push(line.parse().unwrap());
             }
-
         }
-        Problem { ranges, ingredients}
+        Problem { ranges, ingredients }
     }
 
-    fn merge(start: i64, end: i64, collapsed: &mut Vec<(i64,i64)>) {
+    fn merge(start: i64, end: i64, collapsed: &mut Vec<(i64, i64)>) {
         let mut new_start = start;
         let mut new_end = end;
         let mut to_remove: Vec<usize> = Vec::new();
@@ -78,8 +77,6 @@ impl Problem {
         collapsed.push((new_start, new_end));
     }
 }
-
-
 
 #[rustfmt::skip]
 #[cfg(test)]

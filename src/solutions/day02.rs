@@ -19,9 +19,7 @@ impl Solve for Problem {
         }
 
         // Pre-calculate powers for efficiency
-        let powers: Vec<i64> = (0..=max * 2)
-            .map(|i| 10_i64.pow(u32::try_from(i).unwrap()))
-            .collect();
+        let powers: Vec<i64> = (0..=max * 2).map(|i| 10_i64.pow(u32::try_from(i).unwrap())).collect();
 
         // Use a set to avoid double counting 22 22 and 2 2 2 2
         // Store sets by length
@@ -70,10 +68,7 @@ impl Solve for Problem {
 
     /// See p1 for details
     fn p2(&mut self) -> i64 {
-        assert!(
-            self.p2 >= 0,
-            "Part 1 must be run before part 2 to set p2 value"
-        );
+        assert!(self.p2 >= 0, "Part 1 must be run before part 2 to set p2 value");
         self.p2
     }
 }
@@ -102,10 +97,7 @@ mod test {
 
     #[test]
     fn p1() {
-        assert_eq!(
-            Problem::new(&load_file("input/02_test.txt")).p1(),
-            ANSWERS[0]
-        );
+        assert_eq!(Problem::new(&load_file("input/02_test.txt")).p1(), ANSWERS[0]);
     }
 
     #[test]
