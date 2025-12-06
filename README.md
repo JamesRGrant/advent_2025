@@ -29,23 +29,23 @@ I enjoy making my code as fast as possible without resorting to unreadable code.
 
 These times are running WSL2 in Windows Pro 25H2 on a AMD Ryzen 9 6900HX with 32 GB RAM:
 ```
-01: load/parse      in 450.937µs
- 1:            1177 in  16.222µs
- 2:            6768 in  25.988µs
-02: load/parse      in  41.338µs
- 1:     17077011375 in   2.437ms
+01: load/parse      in 418.955µs
+ 1:            1177 in  15.939µs
+ 2:            6768 in  26.457µs
+02: load/parse      in  42.015µs
+ 1:     17077011375 in   2.390ms
  2:     36037497037 in  50.000ns
-03: load/parse      in  42.662µs
- 1:           17155 in  13.174µs
- 2: 169685670469164 in  44.125µs
-04: load/parse      in  48.246µs
- 1:            1363 in  90.526µs
- 2:            8184 in 568.553µs
-05: load/parse      in 105.305µs
- 1:             520 in  57.510µs
- 2: 347338785050515 in  91.000ns
-06: load/parse      in  84.982µs
- 1:   7326876294741 in   4.822µs
- 2:  10756006415204 in  74.986µs
-Total elapsed time:      4.372ms
+03: load/parse      in  42.696µs
+ 1:           17155 in  13.163µs
+ 2: 169685670469164 in  44.318µs
+04: load/parse      in 140.670µs
+ 1:            1363 in  60.000ns
+ 2:            8184 in 530.774µs
+05: load/parse      in 100.479µs
+ 1:             520 in  58.174µs
+ 2: 347338785050515 in 100.000ns
+06: load/parse      in  94.097µs
+ 1:   7326876294741 in   4.818µs
+ 2:  10756006415204 in  73.941µs
+Total elapsed time:      4.243ms
 ```
