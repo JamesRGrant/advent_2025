@@ -42,7 +42,7 @@ impl Solve for Problem {
                         start = j + 1;
                     }
                 }
-                sum += i64::from(max.to_digit(10).unwrap()) * 10i64.pow((i - 1) as u32);
+                sum += i64::from(max.to_digit(10).unwrap()) * 10i64.pow(u32::try_from(i - 1).unwrap());
             }
         }
 

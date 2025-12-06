@@ -9,28 +9,41 @@ impl Solve for Problem {
     /// Find locations with less than 4 neighbors
     #[allow(clippy::cast_possible_wrap)]
     fn p1(&mut self) -> i64 {
-        Problem::find_lonely(&self.grid, self.h, self.w).len() as i64
+        let mut sum = 0;
+        for j in 1..=self.h {
+            for i in 1..=self.w {
+                if self.grid[j][i] == '@' && Problem::is_lonely(&self.grid, i, j) {
+                    sum += 1;
+                }
+            }
+        }
+        sum
     }
 
     /// Find locations with less than 4 neighbors and remove them
     /// Repeat until stable
+    /// At the start, there are 18k points.
+    /// On each subsequent pass, we will only look at neighbors of those removed
     #[allow(clippy::cast_possible_wrap)]
     fn p2(&mut self) -> i64 {
         let mut grid = self.grid.clone();
         let mut sum: i64 = 0;
 
-        loop {
-            let points = Problem::find_lonely(&grid, self.h, self.w);
-
-            if points.is_empty() {
-                break;
+        let mut lonely = Problem::find_lonely(&grid, self.h, self.w);
+        while !lonely.is_empty() {
+            sum += lonely.len() as i64;
+            for (i, j) in &lonely {
+                grid[*j][*i] = '.';
             }
-            sum += points.len() as i64;
 
-            // Remove those points and look for more
-            for (i, j) in points {
-                grid[j][i] = '.';
+            let mut new_lonely: Vec<(usize, usize)> = Vec::new();
+            for (i, j) in &lonely {
+                Problem::check_neighbors(&mut grid, *i, *j, &mut new_lonely);
             }
+            new_lonely.sort_unstable();
+            new_lonely.dedup();
+
+            lonely = new_lonely;
         }
 
         sum
@@ -57,26 +70,48 @@ impl Problem {
         let mut points: Vec<(usize, usize)> = Vec::new();
         for j in 1..=h {
             for i in 1..=w {
-                if grid[j][i] == '@' {
-                    let mut count = 0;
-
-                    // Check all 8 neighbors
-                    if grid[j - 1][i - 1] == '@' { count += 1; }
-                    if grid[j - 1][i    ] == '@' { count += 1; }
-                    if grid[j - 1][i + 1] == '@' { count += 1; }
-                    if grid[j    ][i - 1] == '@' { count += 1; }
-                    if grid[j    ][i + 1] == '@' { count += 1; }
-                    if grid[j + 1][i - 1] == '@' { count += 1; }
-                    if grid[j + 1][i    ] == '@' { count += 1; }
-                    if grid[j + 1][i + 1] == '@' { count += 1; }
-                     
-                    if count < 4 {
+                if grid[j][i] == '@' && Problem::is_lonely(grid, i, j) {
                         points.push((i, j));
-                    }
                 }
             }
         }
         points
+    }
+
+    #[rustfmt::skip]
+    fn is_lonely(grid: &[Vec<char>], i: usize, j: usize) -> bool {
+        let mut count = 0;
+        
+        // Check all 8 neighbors
+        if grid[j - 1][i - 1] == '@' { count += 1; }
+        if grid[j - 1][i    ] == '@' { count += 1; }
+        if grid[j - 1][i + 1] == '@' { count += 1; }
+        if grid[j    ][i - 1] == '@' { count += 1; }
+        if grid[j    ][i + 1] == '@' { count += 1; }
+        if grid[j + 1][i - 1] == '@' { count += 1; }
+        if grid[j + 1][i    ] == '@' { count += 1; }
+        if grid[j + 1][i + 1] == '@' { count += 1; }
+        
+        count < 4
+    }
+
+
+    #[rustfmt::skip]
+    fn check_neighbors(grid: &mut [Vec<char>], i: usize, j: usize, new_lonely: &mut Vec<(usize, usize)>) {
+        Problem::check_one_neighbor(grid, i - 1, j - 1, new_lonely);
+        Problem::check_one_neighbor(grid, i    , j - 1, new_lonely);
+        Problem::check_one_neighbor(grid, i + 1, j - 1, new_lonely);
+        Problem::check_one_neighbor(grid, i - 1, j    , new_lonely);
+        Problem::check_one_neighbor(grid, i + 1, j    , new_lonely);
+        Problem::check_one_neighbor(grid, i - 1, j + 1, new_lonely);
+        Problem::check_one_neighbor(grid, i    , j + 1, new_lonely);
+        Problem::check_one_neighbor(grid, i + 1, j + 1, new_lonely);
+    }
+
+    fn check_one_neighbor(grid: &mut [Vec<char>], i: usize, j: usize, new_lonely: &mut Vec<(usize, usize)>) {
+        if grid[j][i] == '@' && Problem::is_lonely(grid, i, j) {
+            new_lonely.push((i, j));
+        }
     }
 }
 
