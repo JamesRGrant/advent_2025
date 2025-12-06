@@ -89,13 +89,15 @@ impl Solve for Problem {
 
 impl Problem {
     pub fn new(data: &[String]) -> Self {
-        let mut direction = Vec::with_capacity(data.len());
-        let mut number = Vec::with_capacity(data.len());
-
-        for line in data {
-            direction.push(line.chars().next().unwrap());
-            number.push(line[1..].parse().unwrap());
-        }
+        let (direction, number): (Vec<char>, Vec<i16>) = data
+            .iter()
+            .map(|line| {
+                let (first, rest) = line.split_at(1);
+                let dir = first.chars().next().expect("Empty line");
+                let num: i16 = rest.parse().expect("Invalid number");
+                (dir, num)
+            })
+            .unzip();
 
         Problem { direction, number }
     }
