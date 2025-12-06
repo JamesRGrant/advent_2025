@@ -80,34 +80,15 @@ impl Problem {
     }
 }
 
+#[rustfmt::skip]
 #[cfg(test)]
 mod test {
     use super::*;
     use crate::load_file;
     const ANSWERS: [i64; 4] = [13, 43, 1363, 8184];
 
-    #[test]
-    fn p1() {
-        assert_eq!(
-            Problem::new(&load_file("input/04_test.txt")).p1(),
-            ANSWERS[0]
-        );
-    }
-
-    #[test]
-    fn p2() {
-        assert_eq!(
-            Problem::new(&load_file("input/04_test.txt")).p2(),
-            ANSWERS[1]
-        );
-    }
-    #[test]
-    fn f1() {
-        assert_eq!(Problem::new(&load_file("input/04.txt")).p1(), ANSWERS[2]);
-    }
-
-    #[test]
-    fn f2() {
-        assert_eq!(Problem::new(&load_file("input/04.txt")).p2(), ANSWERS[3]);
-    }
+    #[test] fn p1() { assert_eq!(Problem::new(&load_file("input/04_test.txt")).p1(), ANSWERS[0]); }
+    #[test] fn p2() { assert_eq!(Problem::new(&load_file("input/04_test.txt")).p2(), ANSWERS[1]); }
+    #[test] fn f1() { assert_eq!(Problem::new(&load_file("input/04.txt")).p1(), ANSWERS[2]); }
+    #[test] fn f2() { assert_eq!(Problem::new(&load_file("input/04.txt")).p2(), ANSWERS[3]); }
 }
