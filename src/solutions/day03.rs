@@ -1,31 +1,28 @@
 use crate::Solve;
 
 pub struct Problem {
-    data: Vec<String>,
+    data: Vec<Vec<char>>,
 }
 impl Solve for Problem {
     /// Find the highest 2 digit number in each line and sum them
     fn p1(&mut self) -> i64 {
         let mut sum = 0;
         for line in &self.data {
-            let mut max: i64 = -1;
-            let mut max2: i64 = -1;
+            let mut max: char = '/';
+            let mut max2: char = '/';
             let mut j = 0;
 
-            // Convert to numbers
-            let nums: Vec<i64> = line.chars().map(|c| i64::from(c.to_digit(10).unwrap())).collect();
-            for (i, x) in nums.iter().enumerate().take(nums.len() - 1) {
+            for (i, x) in line.iter().enumerate().take(line.len() - 1) {
                 if *x > max {
                     max = *x;
                     j = i;
                 }
             }
-            for (_, y) in nums.iter().enumerate().skip(j + 1) {
-                if *y >= max2 {
-                    max2 = *y;
-                }
+            for (_, y) in line.iter().enumerate().skip(j + 1) {
+                max2 = max2.max(*y);
             }
-            sum += max * 10 + max2;
+
+            sum += i64::from(max.to_digit(10).unwrap() * 10 + max2.to_digit(10).unwrap());
         }
         sum
     }
@@ -34,33 +31,31 @@ impl Solve for Problem {
     fn p2(&mut self) -> i64 {
         let mut sum = 0;
         for line in &self.data {
-            let mut str = String::new();
-            let chars = ['9', '8', '7', '6', '5', '4', '3', '2', '1', '0'];
-
-            let mut next = 0;
-            let mut start;
+            let line_len = line.len();
+            let mut start = 0;
             // Characters left
-            'outer: for i in (1..=12).rev() {
-                start = next;
-                for c in &chars {
-                    for j in start..=(line.len() - i) {
-                        if line.chars().nth(j).unwrap() == *c {
-                            str.push(*c);
-                            next = j + 1;
-                            continue 'outer;
-                        }
+            for i in (1..=12).rev() {
+                let mut max = '/';
+                for (j, c) in line.iter().enumerate().skip(start).take(line_len - start - i + 1) {
+                    if *c > max {
+                        max = *c;
+                        start = j + 1;
                     }
                 }
+                sum += i64::from(max.to_digit(10).unwrap()) * 10i64.pow((i - 1) as u32);
             }
-
-            sum += str.parse::<i64>().unwrap();
         }
+
         sum
     }
 }
 impl Problem {
     pub fn new(data: &[String]) -> Self {
-        Problem { data: data.to_vec() }
+        let mut char_data: Vec<Vec<char>> = Vec::with_capacity(data.len());
+        for line in data {
+            char_data.push(line.chars().collect());
+        }
+        Problem { data: char_data }
     }
 }
 
