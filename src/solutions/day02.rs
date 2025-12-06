@@ -1,5 +1,4 @@
 use crate::Solve;
-use std::collections::HashSet;
 
 pub struct Problem {
     data: Vec<(i64, i64)>,
@@ -23,8 +22,8 @@ impl Solve for Problem {
 
         // Use a set to avoid double counting 22 22 and 2 2 2 2
         // Store sets by length
-        let mut splits: Vec<HashSet<i64>> = vec![HashSet::new(); max + 1];
-        let mut all: Vec<HashSet<i64>> = vec![HashSet::new(); max + 1];
+        let mut splits: Vec<Vec<i64>> = vec![Vec::new(); max + 1];
+        let mut all: Vec<Vec<i64>> = vec![Vec::new(); max + 1];
         for total_len in min..=max {
             for seg_len in 1..=(total_len / 2) {
                 if total_len % seg_len == 0 {
@@ -40,19 +39,34 @@ impl Solve for Problem {
                         }
                         if seg_len == total_len / 2 && total_len % 2 == 0 {
                             // Half split for p1
-                            splits[total_len].insert(num);
+                            splits[total_len].push(num);
+                        } else {
+                            // All repeats for p2
+                            all[total_len].push(num);
                         }
-                        // All repeats for p2
-                        all[total_len].insert(num);
                     }
                 }
             }
         }
+
+        // Sort and dedup
+        for len in min..=max {
+            splits[len].sort_unstable();
+            splits[len].dedup();
+            all[len].sort_unstable();
+            all[len].dedup();
+
+            // Remove any splits from all
+            // there are some cases that overlap like 22 22 22 22 and 2 2 2 2 2 2 2 2
+            all[len].retain(|num| !splits[len].contains(num));
+        }
+
         for (start, end) in &self.data {
             for len in start.to_string().len()..=end.to_string().len() {
                 for &num in &splits[len] {
                     if num >= *start && num <= *end {
                         sum += num;
+                        p2 += num;
                     }
                 }
                 for &num in &all[len] {
