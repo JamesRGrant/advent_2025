@@ -36,6 +36,7 @@ impl Solve for Problem {
     }
 
     /// Short Description
+    #[allow(clippy::cast_possible_wrap)]
     fn p2(&mut self) -> i64 {
         // Find S
         let mut splits = 0;
