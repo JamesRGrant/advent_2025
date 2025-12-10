@@ -9,6 +9,7 @@ impl Solve for Problem {
     /// Points in 3D space
     /// Connect N (either 40 or 1000) of the closest points
     /// Find the top 3 longest connections (most points), multiply their lengths
+    #[allow(clippy::cast_possible_wrap)]
     fn p1(&mut self) -> i64 {
         let mut chains: Vec<Vec<usize>> = Vec::new();
 
@@ -145,7 +146,7 @@ impl Problem {
 mod test {
     use super::*;
     use crate::load_file;
-    const ANSWERS: [i64; 4] = [40, 25272, 84968, 0];
+    const ANSWERS: [i64; 4] = [40, 25272, 84968, 8_663_467_782];
 
     #[test] fn p1() { assert_eq!(Problem::new(&load_file("input/08_test.txt")).p1(), ANSWERS[0]); }
     #[test] fn p2() { assert_eq!(Problem::new(&load_file("input/08_test.txt")).p2(), ANSWERS[1]); }
