@@ -100,14 +100,14 @@ impl Solve for Problem {
             let y_min = self.points[*p1].1.min(self.points[*p2].1);
             let y_max = self.points[*p1].1.max(self.points[*p2].1);
 
-            let xi_min = x_index.iter().position(|v| v == &x_min).unwrap();
-            let xi_max = x_index.iter().position(|v| v == &x_max).unwrap();
-            let yi_min = y_index.iter().position(|v| v == &y_min).unwrap();
-            let yi_max = y_index.iter().position(|v| v == &y_max).unwrap();
+            let x_index_min = x_index.iter().position(|v| v == &x_min).unwrap();
+            let x_index_max = x_index.iter().position(|v| v == &x_max).unwrap();
+            let y_index_min = y_index.iter().position(|v| v == &y_min).unwrap();
+            let y_index_max = y_index.iter().position(|v| v == &y_max).unwrap();
 
             let mut ok = true;
-            'outer: for xi in xi_min..=xi_max {
-                for yi in yi_min..=yi_max {
+            'outer: for xi in x_index_min..=x_index_max {
+                for yi in y_index_min..=y_index_max {
                     let idx = yi * x_len + xi;
                     if !grid_clone[idx] {
                         ok = false;
@@ -185,6 +185,7 @@ impl Problem {
         result
     }
 
+    #[allow(dead_code)]
     fn print_grid(grid: &[bool], x_len: usize, y_len: usize) {
         for yi in 0..y_len {
             for xi in 0..x_len {
