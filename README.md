@@ -29,35 +29,43 @@ I enjoy making my code as fast as possible without resorting to unreadable code.
 
 These times are running WSL2 in Windows Pro 25H2 on a AMD Ryzen 9 6900HX with 32 GB RAM:
 ```
-01: load/parse      in   4.271ms
- 1:            1177 in  37.064µs
- 2:            6768 in  55.155µs
-02: load/parse      in 565.422µs
- 1:     17077011375 in   4.959ms
- 2:     36037497037 in 190.000ns
-03: load/parse      in 869.612µs
- 1:           17155 in  57.099µs
- 2: 169685670469164 in 102.286µs
-04: load/parse      in 983.408µs
- 1:            1363 in 280.000ns
- 2:            8184 in   1.042ms
-05: load/parse      in 712.040µs
- 1:             520 in 131.467µs
- 2: 347338785050515 in 290.000ns
-06: load/parse      in 915.736µs
- 1:   7326876294741 in   9.185µs
- 2:  10756006415204 in 139.060µs
-07: load/parse      in 697.089µs
- 1:            1598 in 111.242µs
- 2:   4509723641302 in 372.674µs
-08: load/parse      in  60.613ms
- 1:           84968 in   1.091ms
- 2:      8663467782 in   2.929ms
-09: load/parse      in  14.547ms
- 1:      4759420470 in 281.000ns
- 2:      1603439684 in  74.341ms
-10: load/parse      in   2.231ms
- 1:             415 in   5.184ms
- 2:               0 in 441.000ns
-Total elapsed time:    181.693ms
+01: load/parse      in 464.430µs
+ 1:            1177 in  18.072µs
+ 2:            6768 in  28.546µs
+02: load/parse      in  44.523µs
+ 1:     17077011375 in   2.609ms
+ 2:     36037497037 in  76.000ns
+03: load/parse      in  46.476µs
+ 1:           17155 in  14.360µs
+ 2: 169685670469164 in  47.290µs
+04: load/parse      in 161.149µs
+ 1:            1363 in  54.000ns
+ 2:            8184 in 585.637µs
+05: load/parse      in 105.816µs
+ 1:             520 in  62.411µs
+ 2: 347338785050515 in 108.000ns
+06: load/parse      in 100.725µs
+ 1:   7326876294741 in   5.156µs
+ 2:  10756006415204 in  79.820µs
+07: load/parse      in  43.915µs
+ 1:            1598 in  56.593µs
+ 2:   4509723641302 in 264.370µs
+08: load/parse      in  33.084ms
+ 1:           84968 in 685.287µs
+ 2:      8663467782 in   1.706ms
+09: load/parse      in   7.691ms
+ 1:      4759420470 in 227.000ns
+ 2:      1603439684 in  37.155ms
+10: load/parse      in 297.464µs
+ 1:             415 in   2.840ms
+ 2:             156 in 162.000ns
+11: load/parse      in   2.090ms
+ 1:             523 in   8.140µs
+ 2: 517315308154944 in  92.313µs
+12: load/parse      in   8.227µs
+ 1:               0 in  54.000ns
+ 2:               0 in  33.000ns
+Total elapsed time:     93.006ms
 ```
+
+Three problmems are unfinished.
