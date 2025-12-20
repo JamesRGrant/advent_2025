@@ -14,7 +14,7 @@ edition = "2021"
 nalgebra = "0.32"
 good_lp = "1.7"
 #regex = "1"
-#petgraph = "0.6.4"
+petgraph = "0.6"
 
 # This is for profiling, remove if not using
 #[profile.release]

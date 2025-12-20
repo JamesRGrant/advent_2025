@@ -11,7 +11,7 @@ pub struct Problem {
 }
 impl Solve for Problem {
     /// Min operations toggling lights to desired pattern
-    /// Using binary representation and just brute forcing all combinations
+    /// Using binary representation and brute forcing all combinations
     #[allow(clippy::cast_possible_wrap)]
     fn p1(&mut self) -> i64 {
         let mut sum = 0;
@@ -25,7 +25,7 @@ impl Solve for Problem {
                 let mut b_start: u16 = 0;
 
                 for x in 0..self.operations[i].len() {
-                    // If bit i is set, we apply that operation
+                    // If bit i is set, we apply that operation via XOR
                     if (check & (1 << x)) != 0 {
                         b_start ^= self.binary_ops[i][x];
                         steps += 1;
@@ -113,7 +113,7 @@ impl Solve for Problem {
         // }
         // println!();
         // sum
-        0
+        self.joltages.len() as i64
     }
 }
 impl Problem {
@@ -343,12 +343,13 @@ impl Problem {
     // Format: [.##.] (3) (1,3) (2) (2,3) (0,2) (0,1) {3,5,4,7}
     // Max length of the positions is 10
     // Max count of the operations is 13
+    // Max voltage is 272, so either u16 or i16 is needed
     pub fn new(data: &[String]) -> Self {
-        let mut answers: Vec<Vec<bool>> = Vec::with_capacity(data.len());
         let mut operations: Vec<Vec<Vec<i32>>> = Vec::with_capacity(data.len());
         let mut joltages: Vec<Vec<i32>> = Vec::with_capacity(data.len());
         let mut lights: Vec<u16> = Vec::with_capacity(data.len());
         let mut binary_ops: Vec<Vec<u16>> = Vec::with_capacity(data.len());
+        let mut max = 0;
 
         for line in data {
             let mut parts = line.split(' ');
@@ -372,7 +373,6 @@ impl Problem {
             }
             let light_len = first_bools.len();
             lights.push(light);
-            answers.push(first_bools);
 
             // Parse the operations (all but last)
             let mut line_operations: Vec<Vec<i32>> = Vec::new();
@@ -406,6 +406,9 @@ impl Problem {
                 .split(',')
                 .map(|s| s.parse::<i32>().unwrap())
                 .collect::<Vec<i32>>();
+
+            max = max.max(*last_nums.iter().max().unwrap());
+            // println!("Max voltage so far: {}", max);
             joltages.push(last_nums);
         }
 
